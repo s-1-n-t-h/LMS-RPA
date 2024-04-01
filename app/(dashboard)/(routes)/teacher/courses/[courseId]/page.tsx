@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { CircleDollarSign, File, LayoutDashboard, ListChecks } from "lucide-react";
+import { CircleDollarSign, Eye, File, LayoutDashboard, ListChecks, YoutubeIcon } from "lucide-react";
 
 import { db } from "@/lib/db";
 import { IconBadge } from "@/components/icon-badge";
@@ -14,6 +14,9 @@ import { PriceForm } from "./_components/price-form";
 import { AttachmentForm } from "./_components/attachment-form";
 import { ChaptersForm } from "./_components/chapters-form";
 import { Actions } from "./_components/actions";
+import { ListIdForm } from "./_components/youtube-listid-form";
+//aimport { ChapterAccessForm } from "./chapters/[chapterId]/_components/chapter-access-form";
+
 
 const CourseIdPage = async ({
   params
@@ -61,11 +64,12 @@ const CourseIdPage = async ({
     course.imageUrl,
     course.price,
     course.categoryId,
+    course.listId,
     course.chapters.some(chapter => chapter.isPublished),
   ];
 
   const totalFields = requiredFields.length;
-  const completedFields = requiredFields.filter(Boolean).length;
+  const completedFields = requiredFields.filter((value) => (value === 0 || Boolean(value))).length;
 
   const completionText = `(${completedFields}/${totalFields})`;
 
@@ -122,8 +126,32 @@ const CourseIdPage = async ({
                 value: category.id,
               }))}
             />
+            <div>
+              <div className="flex items-center gap-x-2 mt-4">
+                <IconBadge icon={File} />
+                <h2 className="text-xl">
+                  Resources & Attachments
+                </h2>
+              </div>
+              <AttachmentForm
+                initialData={course}
+                courseId={course.id}
+              />
+            </div>
           </div>
-          <div className="space-y-6">
+          <div className="space-y-8">
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={YoutubeIcon} />
+                <h2 className="text-xl">
+                  Course Youtube List Id
+                </h2>
+              </div>
+              <ListIdForm
+                initialData={course}
+                courseId={course.id}
+              />
+            </div>
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={ListChecks} />
@@ -148,18 +176,19 @@ const CourseIdPage = async ({
                 courseId={course.id}
               />
             </div>
-            <div>
+            {/* <div>
               <div className="flex items-center gap-x-2">
-                <IconBadge icon={File} />
+                <IconBadge icon={Eye} />
                 <h2 className="text-xl">
-                  Resources & Attachments
+                  Access Settings
                 </h2>
               </div>
-              <AttachmentForm
-                initialData={course}
-                courseId={course.id}
+              <ChapterAccessForm
+                initialData={chapter}
+                courseId={course.courseId}
+                chapterId={params.chapterId}
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

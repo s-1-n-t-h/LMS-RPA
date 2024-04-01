@@ -9,7 +9,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Course } from "@prisma/client";
-
+import { getPlaylistVideos } from "@/actions/rpa-actions/get-videos-from-playlist";
 import {
   Form,
   FormControl,
@@ -19,22 +19,23 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { formatPrice } from "@/lib/format";
+import { Textarea } from "@/components/ui/textarea";
 
-interface PriceFormProps {
+interface ListIdFormProps {
   initialData: Course;
   courseId: string;
 };
 
 const formSchema = z.object({
-  price: z.coerce.number(),
+  listId: z.string().min(1, {
+    message: "YouTube list ID is needed",
+  }),
 });
 
-export const PriceForm = ({
+export const ListIdForm = ({
   initialData,
   courseId
-}: PriceFormProps) => {
+}: ListIdFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -44,7 +45,7 @@ export const PriceForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      price: initialData?.price === 0 ? 0 : initialData?.price!,
+      listId: initialData?.listId || ""
     },
   });
 
@@ -55,6 +56,7 @@ export const PriceForm = ({
       await axios.patch(`/api/courses/${courseId}`, values);
       toast.success("Course updated");
       toggleEdit();
+      console.log("data", await getPlaylistVideos(values.listId))
       router.refresh();
     } catch {
       toast.error("Something went wrong");
@@ -64,14 +66,14 @@ export const PriceForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course price
+        Course list Id
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit price
+              Edit Playlist ID
             </>
           )}
         </Button>
@@ -79,12 +81,9 @@ export const PriceForm = ({
       {!isEditing && (
         <p className={cn(
           "text-sm mt-2",
-          !initialData.price && "text-slate-500 italic"
+          !initialData.listId && "text-slate-500 italic"
         )}>
-          {(initialData.price ||  (initialData.price || 1))
-            ? formatPrice(initialData.price!)
-            : "No price"
-          }
+          {initialData.listId || "No listId"}
         </p>
       )}
       {isEditing && (
@@ -95,16 +94,13 @@ export const PriceForm = ({
           >
             <FormField
               control={form.control}
-              name="price"
+              name="listId"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      min="0.00"
+                    <Textarea
                       disabled={isSubmitting}
-                      placeholder="Set a price for your course"
+                      placeholder="e.g. 'This course is about...'"
                       {...field}
                     />
                   </FormControl>
