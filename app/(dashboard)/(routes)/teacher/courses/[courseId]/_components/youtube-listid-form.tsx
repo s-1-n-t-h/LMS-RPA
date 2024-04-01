@@ -53,10 +53,11 @@ export const ListIdForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
+      const youtubeData = await getPlaylistVideos(values.listId)
+      await axios.post(`/api/courses/${courseId}/playlist-update`, youtubeData);
       toast.success("Course updated");
       toggleEdit();
-      console.log("data", await getPlaylistVideos(values.listId))
+      console.log("data", youtubeData)
       router.refresh();
     } catch {
       toast.error("Something went wrong");
