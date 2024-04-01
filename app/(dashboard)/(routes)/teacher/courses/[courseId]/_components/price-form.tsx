@@ -81,8 +81,8 @@ export const PriceForm = ({
           "text-sm mt-2",
           !initialData.price && "text-slate-500 italic"
         )}>
-          {initialData.price
-            ? formatPrice(initialData.price)
+          {(initialData.price ||  (initialData.price || 1))
+            ? formatPrice(initialData.price!)
             : "No price"
           }
         </p>
@@ -102,6 +102,7 @@ export const PriceForm = ({
                     <Input
                       type="number"
                       step="0.01"
+                      min="0.00"
                       disabled={isSubmitting}
                       placeholder="Set a price for your course"
                       {...field}
