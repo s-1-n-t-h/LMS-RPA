@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import MuxPlayer from "@mux/mux-player-react";
+//import MuxPlayer from "@mux/mux-player-react";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -32,7 +32,8 @@ export const VideoPlayer = ({
   const [isReady, setIsReady] = useState(false);
   const router = useRouter();
   const confetti = useConfettiStore();
-
+  const id = 'sKQtUYfEHII' // temporarily added a id of video to check the laoding
+  const youtubeUrl = `https://www.youtube.com/embed/${id}`;
   const onEnd = async () => {
     try {
       if (completeOnEnd) {
@@ -71,18 +72,19 @@ export const VideoPlayer = ({
           </p>
         </div>
       )}
-      {!isLocked && (
-        <MuxPlayer
-          title={title}
-          className={cn(
-            !isReady && "hidden"
-          )}
-          onCanPlay={() => setIsReady(true)}
-          onEnded={onEnd}
-          autoPlay
-          playbackId={playbackId}
-        />
-      )}
+  {!isLocked && (
+      <iframe
+        width="100%"
+        height="100%"
+        src={youtubeUrl}
+        frameBorder="0"
+        allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        title={title}
+        className={cn(!isReady && "hidden")}
+        onLoad={() => setIsReady(true)}
+      />
+    )}
     </div>
   )
 }
