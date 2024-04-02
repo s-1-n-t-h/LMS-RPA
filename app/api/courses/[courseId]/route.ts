@@ -11,7 +11,7 @@ const { Video } = new Mux(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: { courseId: string } },
 ) {
   try {
     const { userId } = auth();
@@ -29,19 +29,13 @@ export async function DELETE(
         chapters: {
           include: {
             muxData: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     if (!course) {
       return new NextResponse("Not found", { status: 404 });
-    }
-
-    for (const chapter of course.chapters) {
-      if (chapter.muxData?.assetId) {
-        await Video.Assets.del(chapter.muxData.assetId);
-      }
     }
 
     const deletedCourse = await db.course.delete({
@@ -59,7 +53,7 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: { courseId: string } },
 ) {
   try {
     const { userId } = auth();
@@ -73,11 +67,11 @@ export async function PATCH(
     const course = await db.course.update({
       where: {
         id: courseId,
-        userId
+        userId,
       },
       data: {
         ...values,
-      }
+      },
     });
 
     return NextResponse.json(course);

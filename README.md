@@ -1,7 +1,6 @@
-# Building an LMS Platform: Next.js 13,  React, Stripe, Mux, Prisma, Tailwind, MySQL
+# Building an LMS Platform: Next.js 13, React, Stripe, Mux, Prisma, Tailwind, MySQL
 
-
-This is a repository for Build an LMS Platform: Next.js 13,  React, Stripe, Mux, Prisma, Tailwind, MySQL
+This is a repository for Build an LMS Platform: Next.js 13, React, Stripe, Mux, Prisma, Tailwind, MySQL
 
 Key Features:
 
@@ -39,7 +38,6 @@ npm i
 ```
 
 ### Setup .env file
-
 
 ```js
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
@@ -84,6 +82,6 @@ npm run dev
 
 Running commands with npm `npm run [command]`
 
-| command         | description                              |
-| :-------------- | :--------------------------------------- |
-| `dev`           | Starts a development instance of the app |
+| command | description                              |
+| :------ | :--------------------------------------- |
+| `dev`   | Starts a development instance of the app |
