@@ -125,7 +125,7 @@ const ChapterIdPage = async ({
             <div className="flex items-center gap-x-2">
               <IconBadge icon={Video} />
               <h2 className="text-xl">
-                Add a video
+                YouTube Video
               </h2>
             </div>
             <ChapterVideoForm
