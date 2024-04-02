@@ -52,7 +52,7 @@ export const ChapterVideoForm = ({
         <iframe
           width="90%"
           height="100%"
-          src={initialData.videoUrl}
+          src={initialData?.videoUrl as string}
           frameBorder="10"
           allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
