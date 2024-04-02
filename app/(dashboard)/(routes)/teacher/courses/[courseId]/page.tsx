@@ -1,6 +1,13 @@
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { CircleDollarSign, Eye, File, LayoutDashboard, ListChecks, YoutubeIcon } from "lucide-react";
+import {
+  CircleDollarSign,
+  Eye,
+  File,
+  LayoutDashboard,
+  ListChecks,
+  YoutubeIcon,
+} from "lucide-react";
 
 import { db } from "@/lib/db";
 import { IconBadge } from "@/components/icon-badge";
@@ -17,12 +24,7 @@ import { Actions } from "./_components/actions";
 import { ListIdForm } from "./_components/youtube-listid-form";
 //aimport { ChapterAccessForm } from "./chapters/[chapterId]/_components/chapter-access-form";
 
-
-const CourseIdPage = async ({
-  params
-}: {
-  params: { courseId: string }
-}) => {
+const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = auth();
 
   if (!userId) {
@@ -32,7 +34,7 @@ const CourseIdPage = async ({
   const course = await db.course.findUnique({
     where: {
       id: params.courseId,
-      userId
+      userId,
     },
     include: {
       chapters: {
@@ -65,11 +67,13 @@ const CourseIdPage = async ({
     course.price,
     course.categoryId,
     course.listId,
-    course.chapters.some(chapter => chapter.isPublished),
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
 
   const totalFields = requiredFields.length;
-  const completedFields = requiredFields.filter((value) => (value === 0 || Boolean(value))).length;
+  const completedFields = requiredFields.filter(
+    (value) => value === 0 || Boolean(value),
+  ).length;
 
   const completionText = `(${completedFields}/${totalFields})`;
 
@@ -78,16 +82,12 @@ const CourseIdPage = async ({
   return (
     <>
       {!course.isPublished && (
-        <Banner
-          label="This course is unpublished. It will not be visible to the students."
-        />
+        <Banner label="This course is unpublished. It will not be visible to the students." />
       )}
       <div className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2">
-            <h1 className="text-2xl font-medium">
-              Course setup
-            </h1>
+            <h1 className="text-2xl font-medium">Course setup</h1>
             <span className="text-sm text-slate-700">
               Complete all fields {completionText}
             </span>
@@ -102,22 +102,11 @@ const CourseIdPage = async ({
           <div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={LayoutDashboard} />
-              <h2 className="text-xl">
-                Customize your course
-              </h2>
+              <h2 className="text-xl">Customize your course</h2>
             </div>
-            <TitleForm
-              initialData={course}
-              courseId={course.id}
-            />
-            <DescriptionForm
-              initialData={course}
-              courseId={course.id}
-            />
-            <ImageForm
-              initialData={course}
-              courseId={course.id}
-            />
+            <TitleForm initialData={course} courseId={course.id} />
+            <DescriptionForm initialData={course} courseId={course.id} />
+            <ImageForm initialData={course} courseId={course.id} />
             <CategoryForm
               initialData={course}
               courseId={course.id}
@@ -129,52 +118,32 @@ const CourseIdPage = async ({
             <div>
               <div className="flex items-center gap-x-2 mt-4">
                 <IconBadge icon={File} />
-                <h2 className="text-xl">
-                  Resources & Attachments
-                </h2>
+                <h2 className="text-xl">Resources & Attachments</h2>
               </div>
-              <AttachmentForm
-                initialData={course}
-                courseId={course.id}
-              />
+              <AttachmentForm initialData={course} courseId={course.id} />
             </div>
           </div>
           <div className="space-y-8">
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={YoutubeIcon} />
-                <h2 className="text-xl">
-                  Course Youtube List Id
-                </h2>
+                <h2 className="text-xl">Course Youtube List Id</h2>
               </div>
-              <ListIdForm
-                initialData={course}
-                courseId={course.id}
-              />
+              <ListIdForm initialData={course} courseId={course.id} />
             </div>
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={ListChecks} />
-                <h2 className="text-xl">
-                  Course chapters
-                </h2>
+                <h2 className="text-xl">Course chapters</h2>
               </div>
-              <ChaptersForm
-                initialData={course}
-                courseId={course.id}
-              />
+              <ChaptersForm initialData={course} courseId={course.id} />
             </div>
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={CircleDollarSign} />
-                <h2 className="text-xl">
-                  Sell your course
-                </h2>
+                <h2 className="text-xl">Sell your course</h2>
               </div>
-              <PriceForm
-                initialData={course}
-                courseId={course.id}
-              />
+              <PriceForm initialData={course} courseId={course.id} />
             </div>
             {/* <div>
               <div className="flex items-center gap-x-2">
@@ -193,7 +162,7 @@ const CourseIdPage = async ({
         </div>
       </div>
     </>
-   );
-}
- 
+  );
+};
+
 export default CourseIdPage;

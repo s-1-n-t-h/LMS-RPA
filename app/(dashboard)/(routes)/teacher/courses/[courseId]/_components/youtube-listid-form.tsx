@@ -24,7 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 interface ListIdFormProps {
   initialData: Course;
   courseId: string;
-};
+}
 
 const formSchema = z.object({
   listId: z.string().min(1, {
@@ -32,10 +32,7 @@ const formSchema = z.object({
   }),
 });
 
-export const ListIdForm = ({
-  initialData,
-  courseId
-}: ListIdFormProps) => {
+export const ListIdForm = ({ initialData, courseId }: ListIdFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -45,7 +42,7 @@ export const ListIdForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      listId: initialData?.listId || ""
+      listId: initialData?.listId || "",
     },
   });
 
@@ -53,16 +50,16 @@ export const ListIdForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const youtubeData = await getPlaylistVideos(values.listId)
+      const youtubeData = await getPlaylistVideos(values.listId);
       await axios.post(`/api/courses/${courseId}/playlist-update`, youtubeData);
       toast.success("Course updated");
       toggleEdit();
-      console.log("data", youtubeData)
+      console.log("data", youtubeData);
       router.refresh();
     } catch {
       toast.error("Something went wrong");
     }
-  }
+  };
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
@@ -80,10 +77,12 @@ export const ListIdForm = ({
         </Button>
       </div>
       {!isEditing && (
-        <p className={cn(
-          "text-sm mt-2",
-          !initialData.listId && "text-slate-500 italic"
-        )}>
+        <p
+          className={cn(
+            "text-sm mt-2",
+            !initialData.listId && "text-slate-500 italic",
+          )}
+        >
           {initialData.listId || "No listId"}
         </p>
       )}
@@ -110,10 +109,7 @@ export const ListIdForm = ({
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button
-                disabled={!isValid || isSubmitting}
-                type="submit"
-              >
+              <Button disabled={!isValid || isSubmitting} type="submit">
                 Save
               </Button>
             </div>
@@ -121,5 +117,5 @@ export const ListIdForm = ({
         </Form>
       )}
     </div>
-  )
-}
+  );
+};
