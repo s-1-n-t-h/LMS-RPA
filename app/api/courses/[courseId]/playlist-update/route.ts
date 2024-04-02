@@ -7,15 +7,30 @@ export async function POST(
   req: Request,
   { params }: { params: { courseId: string } },
 ): Promise<NextResponse> {
-  const data = await req.json(); // Array of chapter data objects
+  const data = await req.json();
+  // Array of chapter data object
+  const videosData = data.youtubeData;
+  const listId = data.values.listId;
 
+  // console.log("data",data)
   try {
     const { userId } = auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    const deletedChapters = await db.chapter.deleteMany({
+
+    await db.course.update({
+      where: {
+        id: params.courseId,
+        userId,
+      },
+      data: {
+        listId,
+      },
+    });
+
+    await db.chapter.deleteMany({
       where: {
         courseId: params.courseId,
       },
@@ -30,12 +45,12 @@ export async function POST(
     });
     const newPosition = lastChapter ? lastChapter.position + 1 : 1;
     const newPositionsArray = Array.from(
-      { length: data.length - newPosition + 1 },
+      { length: videosData.length - newPosition + 1 },
       (_, i) => newPosition + i,
     );
 
     const chapters = await db.chapter.createMany({
-      data: data.map((chapterData: any) => ({
+      data: videosData.map((chapterData: any) => ({
         title: chapterData.title,
         description: chapterData.description,
         isFree: true,
@@ -55,7 +70,13 @@ export async function POST(
         position: "asc",
       },
     });
-
+    await db.muxData.deleteMany({
+      where: {
+        chapterId: {
+          in: allChaptersSorted.map((item: any) => item.id),
+        },
+      },
+    });
     const playbacks = await db.muxData.createMany({
       data: allChaptersSorted.map((chapterData: any) => ({
         chapterId: chapterData.id,
