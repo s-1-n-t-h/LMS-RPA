@@ -122,14 +122,14 @@ export async function PATCH(
         where: {
           chapterId: params.chapterId,
         },
-      },);
+      });
 
       if (existingMuxData) {
         await db.muxData.delete({
           where: {
             id: existingMuxData.id,
           },
-        },);
+        });
       }
 
       const allChaptersSorted = await db.chapter.findMany({
@@ -140,16 +140,14 @@ export async function PATCH(
         orderBy: {
           position: "asc",
         },
-      },);
+      });
 
       await db.muxData.createMany({
-        data: allChaptersSorted.map(
-          (chapterData: any) => ({
-            chapterId: chapterData.id,
-            playbackId: chapterData.videoUrl.split("/").pop(),
-          }),
-        ),
-      },);
+        data: allChaptersSorted.map((chapterData: any) => ({
+          chapterId: chapterData.id,
+          playbackId: chapterData.videoUrl.split("/").pop(),
+        })),
+      });
     }
 
     return NextResponse.json(chapter);
