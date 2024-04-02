@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 
 export async function POST(
     req: Request,
+    { params }: { params: { courseId: string } },
 ): Promise<NextResponse> {
     const data = await req.json(); // Array of chapter data objects
 
@@ -14,22 +15,60 @@ export async function POST(
         if (!userId) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
+        const deletedChapters = await db.chapter.deleteMany({
+                where: {
+                    courseId: params.courseId,
+                },
+            },);
+        const lastChapter = await db.chapter.findFirst({
+            where: {
+                courseId: params.courseId,
+            },
+            orderBy: {
+                position: "desc",
+            },
+        },);
+        const newPosition = lastChapter ? lastChapter.position + 1 : 1;
+        const newPositionsArray = Array.from(
+            { length: data.length - newPosition + 1 },
+            (_, i) => newPosition + i,
+        );
 
         const chapters = await db.chapter.createMany({
             data: data.map(
                 (chapterData: any) => ({
                     title: chapterData.title,
                     description: chapterData.description,
-                    isFree: chapterData.isFree, // Assuming logic for free videos
+                    isFree: true,
+                    isPublished: true,
+                    position: newPositionsArray.shift(),
+                    courseId: params.courseId,
                     videoUrl: `https://www.youtube.com/embed/${chapterData.videoId}`,
-                    muxData: {
-                        playbackId: chapterData.playbackId, // Replace with your playback ID
-                    },
+                }),
+            ),
+        },);
+
+        const allChaptersSorted = await db.chapter.findMany({
+            select: {
+                id: true,
+                videoUrl: true,
+            },
+            orderBy: {
+                position: "asc", 
+            },
+        },);
+
+        
+        const playbacks = await db.muxData.createMany({
+            data: allChaptersSorted.map(
+                (chapterData: any) => ({
+                    chapterId: chapterData.id,
+                    playbackId: chapterData.videoUrl.split('/').pop(),
                 }),
             ),
         },);
         return NextResponse.json(
-            `Chapters created successfully!: ${chapters}`,
+            `Chapters created successfully!: ${chapters}, Inserted Playbalcks: ${playbacks}}`,
             { status: 200 },
         );
     } catch (error) {

@@ -33,7 +33,8 @@ export const VideoPlayer = ({
   const router = useRouter();
   const confetti = useConfettiStore();
   const id = 'sKQtUYfEHII' // temporarily added a id of video to check the laoding
-  const youtubeUrl = `https://www.youtube.com/embed/${id}`;
+  console.log("playbackid",playbackId)
+  const youtubeUrl = `https://www.youtube.com/embed/${playbackId}`;
   const onEnd = async () => {
     try {
       if (completeOnEnd) {

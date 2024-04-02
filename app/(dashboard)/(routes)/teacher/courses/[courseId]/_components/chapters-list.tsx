@@ -12,6 +12,7 @@ import { Grip, Pencil } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { count } from "console";
 
 interface ChaptersListProps {
   items: Chapter[];
@@ -48,10 +49,9 @@ export const ChaptersList = ({
     const updatedChapters = items.slice(startIndex, endIndex + 1);
 
     setChapters(items);
-
     const bulkUpdateData = updatedChapters.map((chapter) => ({
       id: chapter.id,
-      position: items.findIndex((item) => item.id === chapter.id)
+      position: 1,
     }));
 
     onReorder(bulkUpdateData);

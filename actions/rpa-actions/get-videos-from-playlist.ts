@@ -3,7 +3,7 @@
 import * as https from "https";
 
 const API_KEY = process.env.YOUTUBE_API_KEY!;
-const MAX_RESULTS = 30;
+const MAX_RESULTS = 10;
 
 export async function getPlaylistVideos(playlistId: string) {
     const url = new URL("https://www.googleapis.com/youtube/v3/playlistItems");
