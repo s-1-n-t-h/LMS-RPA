@@ -107,7 +107,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <div>
               <div className="flex items-center gap-x-2 mt-8">
                 <IconBadge icon={YoutubeIcon} />
-                <h2 className="text-xl">Course Youtube List Id</h2>
+                <h2 className="text-xl">Course Playlist URL</h2>
               </div>
               <ListIdForm initialData={course} courseId={course.id} />
             </div>

@@ -27,9 +27,9 @@ interface ListIdFormProps {
 }
 
 const formSchema = z.object({
-  listId: z.string().min(1, {
-    message: "YouTube list ID is needed",
-  }),
+  listId: z
+    .string()
+    .url({ message: "Please enter a valid YouTube Playlist URL" }),
 });
 
 export const ListIdForm = ({ initialData, courseId }: ListIdFormProps) => {
@@ -47,10 +47,16 @@ export const ListIdForm = ({ initialData, courseId }: ListIdFormProps) => {
   });
 
   const { isSubmitting, isValid } = form.formState;
+  const extractListIdFromUrl = (url: string) => {
+    const urlObject = new URL(url);
+    const searchParams = urlObject.searchParams;
+    return searchParams.get("list");
+  };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const youtubeData = await getPlaylistVideos(values.listId);
+      const listId = extractListIdFromUrl(values.listId)!;
+      const youtubeData = await getPlaylistVideos(listId);
       const newObject = {
         ...youtubeData.map((obj) => ({ ...obj })),
         ["lsitId"]: values.listId,
@@ -72,14 +78,14 @@ export const ListIdForm = ({ initialData, courseId }: ListIdFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course list Id
+        Course Playlist URL
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit Playlist ID
+              Edit Playlist URL
             </>
           )}
         </Button>
