@@ -104,17 +104,16 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               <IconBadge icon={LayoutDashboard} />
               <h2 className="text-xl">Customize your course</h2>
             </div>
+            <div>
+              <div className="flex items-center gap-x-2 mt-8">
+                <IconBadge icon={YoutubeIcon} />
+                <h2 className="text-xl">Course Youtube List Id</h2>
+              </div>
+              <ListIdForm initialData={course} courseId={course.id} />
+            </div>
             <TitleForm initialData={course} courseId={course.id} />
             <DescriptionForm initialData={course} courseId={course.id} />
             <ImageForm initialData={course} courseId={course.id} />
-            <CategoryForm
-              initialData={course}
-              courseId={course.id}
-              options={categories.map((category) => ({
-                label: category.name,
-                value: category.id,
-              }))}
-            />
             <div>
               <div className="flex items-center gap-x-2 mt-4">
                 <IconBadge icon={File} />
@@ -124,13 +123,6 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             </div>
           </div>
           <div className="space-y-8">
-            <div>
-              <div className="flex items-center gap-x-2">
-                <IconBadge icon={YoutubeIcon} />
-                <h2 className="text-xl">Course Youtube List Id</h2>
-              </div>
-              <ListIdForm initialData={course} courseId={course.id} />
-            </div>
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={ListChecks} />
@@ -145,6 +137,14 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               </div>
               <PriceForm initialData={course} courseId={course.id} />
             </div>
+            <CategoryForm
+              initialData={course}
+              courseId={course.id}
+              options={categories.map((category) => ({
+                label: category.name,
+                value: category.id,
+              }))}
+            />
             {/* <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={Eye} />
