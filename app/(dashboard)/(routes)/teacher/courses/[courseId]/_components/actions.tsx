@@ -3,7 +3,7 @@
 import axios from "axios";
 import { Trash } from "lucide-react";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -28,11 +28,13 @@ export const Actions = ({ disabled, courseId, isPublished }: ActionsProps) => {
       if (isPublished) {
         await axios.patch(`/api/courses/${courseId}/unpublish`);
         toast.success("Course unpublished");
-        await sendMail();
+        await sendMail(courseId, "unpublished");
+        toast.success("Email notifications Sent!");
       } else {
         await axios.patch(`/api/courses/${courseId}/publish`);
         toast.success("Course published");
-        await sendMail();
+        toast.success("Email notifications Sent!");
+        await sendMail(courseId);
         confetti.onOpen();
       }
 
