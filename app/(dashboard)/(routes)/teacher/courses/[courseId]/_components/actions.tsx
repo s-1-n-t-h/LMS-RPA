@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "@/components/modals/confirm-modal";
 import { useConfettiStore } from "@/hooks/use-confetti-store";
-
+import { sendMail } from "@/actions/rpa-actions/send-email";
 interface ActionsProps {
   disabled: boolean;
   courseId: string;
@@ -28,9 +28,11 @@ export const Actions = ({ disabled, courseId, isPublished }: ActionsProps) => {
       if (isPublished) {
         await axios.patch(`/api/courses/${courseId}/unpublish`);
         toast.success("Course unpublished");
+        await sendMail();
       } else {
         await axios.patch(`/api/courses/${courseId}/publish`);
         toast.success("Course published");
+        await sendMail();
         confetti.onOpen();
       }
 
