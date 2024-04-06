@@ -22,7 +22,7 @@ export const sendMail = async (courseId: string, type = "published") => {
     const messageTemplate =
       type === "published"
         ? `Greeting Learner, This is to notify that the course: ${courseName.title} is Published.`
-        : `Greeting Learner, This is to notify that the course: ${courseName} is Un-published for maintenance purposes.`;
+        : `Greeting Learner, This is to notify that the course: ${courseName.title} is Un-published for maintenance purposes.`;
 
     const mailOptions = {
       from: process.env.USER_EMAIL,
