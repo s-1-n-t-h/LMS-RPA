@@ -5,21 +5,21 @@ This is a repository for Build an LMS Platform: Next.js 13, React, Stripe, Mux, 
 Key Features:
 
 - Browse & Filter Courses
-- Purchase Courses using Stripe
+- Purchase Courses using Razorpay
 - Mark Chapters as Completed or Uncompleted
 - Progress Calculation of each Course
-- Student Dashboard
+- Student Dashboard 
 - Teacher mode
-- Create new Courses
-- Create new Chapters
+- Create new Courses and Courses using RPA Techniques
 - Easily reorder chapter position with drag n’ drop
 - Upload thumbnails, attachments and videos using UploadThing
-- Video processing using Mux
-- HLS Video player using Mux
+- Video player using YouTube iframes
 - Rich text editor for chapter description
 - Authentication using Clerk
 - ORM using Prisma
-- MySQL database using Planetscale
+- MySQL database using Aiven
+- Automation of Email notifications using Node Mailer and Gmail API integrated RPA script.
+- Course sales anaytics automation
 
 ### Prerequisites
 
@@ -40,26 +40,31 @@ npm i
 ### Setup .env file
 
 ```js
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+# Created by Vercel CLI
 CLERK_SECRET_KEY=
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=
-
-DATABASE_URL=
-
-UPLOADTHING_SECRET=
-UPLOADTHING_APP_ID=
-
-MUX_TOKEN_ID=
-MUX_TOKEN_SECRET=
-
-STRIPE_API_KEY=
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-STRIPE_WEBHOOK_SECRET=
-
+DATABASE_URL= 
+NEXT_PUBLIC_APP_URL=
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/"
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/"
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="
+NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
 NEXT_PUBLIC_TEACHER_ID=
+UPLOADTHING_APP_ID=
+UPLOADTHING_SECRET=
+
+YOUTUBE_API_KEY=
+CLIENT_ID=
+CLIENT_SECRET=
+REFRESH_TOKEN=
+ACCESS_TOKEN=y
+USER_EMAIL=
+USER_PASS=
+
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
+
+PAYMENT_LINK = 
 ```
 
 ### Setup Prisma
