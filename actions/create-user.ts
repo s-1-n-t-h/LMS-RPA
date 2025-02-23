@@ -16,6 +16,22 @@ export const createUser = async (): Promise<string> => {
       update: {},
     });
 
+     if (!userId) {
+      console.error("[CREATE_USER] userId is null, cannot assign courses.");
+      return "User ID is null";
+    }
+
+    // Grant free access to all courses for the user
+    await db.purchase.createMany({
+      data: await db.course.findMany().then((courses) =>
+        courses.map((course) => ({
+          userId,
+          courseId: course.id,
+        }))
+      ),
+      skipDuplicates: true, // Prevent duplicate entries
+    });
+
     return userCreated.email;
   } catch (error) {
     console.log("[GET_PROGRESS]", error);
